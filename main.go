@@ -16,29 +16,29 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-	func main() {
-	
-		
-		// Kreiranje Gin rutera
-		router := gin.Default()
-		router.Use(func(c *gin.Context) {
-			client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb+srv://edinakucevic26:2iq02wV8pyUJFi3N@cluster0.bi7a6j2.mongodb.net/"))
-			if err != nil {
-				   c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to connect to MongoDB"})
-				   return
-			}
-			c.Set("mongoClient", client)
-			c.Next()
-		})
-		
-		router.Use(func(c *gin.Context) {
-			controllers.InitializeCollection(c)
-		})
-		
-		// Podešavanje ruta
-		routes.SetupRentACarRoutes(router)
+func main() {
 
-		// Pokretanje servera
-		fmt.Println("Listening on port 8080")
-		log.Fatal(http.ListenAndServe(":8080", router))
-	}
+	// Kreiranje Gin rutera
+	router := gin.Default()
+	router.Use(func(c *gin.Context) {
+		client, err := mongo.Connect(context.Background(), options.Client().ApplyURI("mongodb+srv://edinakucevic:39ejKp4t0k9AQTpE@cluster0.phbdhqv.mongodb.net/"))
+		if err != nil {
+
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to connect to MongoDB"})
+			return
+		}
+		c.Set("mongoClient", client)
+		c.Next()
+	})
+
+	router.Use(func(c *gin.Context) {
+		controllers.InitializeCollection(c)
+	})
+
+	// Podešavanje ruta
+	routes.SetupRentACarRoutes(router)
+
+	// Pokretanje servera
+	fmt.Println("Listening on port 8080")
+	log.Fatal(http.ListenAndServe(":8080", router))
+}
